@@ -1,0 +1,1191 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Berat Store</title>
+
+<style>
+:root {
+    --bg:#f5f5f7;
+    --surface:#fff;
+    --text:#1d1d1f;
+    --muted:#777;
+    --border:#e5e5e5;
+    --blue:#0878ed;
+    --soft:#eeeeF2;
+}
+
+body.dark {
+    --bg:#151515;
+    --surface:#222;
+    --text:#f5f5f7;
+    --muted:#aaa;
+    --border:#393939;
+    --soft:#303030;
+}
+
+* {
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body {
+    background:var(--bg);
+    color:var(--text);
+    font-family:Arial, sans-serif;
+    transition:.2s;
+}
+
+header {
+    height:65px;
+    padding:0 7%;
+    background:var(--surface);
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+.logo {
+    font-size:23px;
+    font-weight:800;
+    color:var(--text);
+    text-decoration:none;
+}
+
+.logo span {
+    color:var(--blue);
+}
+
+nav {
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+nav a {
+    color:var(--text);
+    text-decoration:none;
+    font-size:13px;
+}
+
+.theme {
+    background:var(--soft);
+    color:var(--text);
+    border:1px solid var(--border);
+    padding:9px 13px;
+    border-radius:20px;
+    cursor:pointer;
+}
+
+.hero {
+    padding:85px 7% 65px;
+}
+
+.hero small {
+    color:var(--blue);
+    letter-spacing:2px;
+    font-weight:bold;
+}
+
+.hero h1 {
+    font-size:clamp(42px,7vw,75px);
+    letter-spacing:-4px;
+    margin-top:18px;
+}
+
+.hero p {
+    color:var(--muted);
+    margin-top:20px;
+    line-height:1.8;
+}
+
+.library {
+    padding:30px 7% 90px;
+}
+
+.top {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:20px;
+    margin-bottom:25px;
+}
+
+.top h2 {
+    font-size:27px;
+}
+
+.search-box {
+    position:relative;
+    width:min(380px,100%);
+}
+
+.search {
+    width:100%;
+    height:46px;
+    padding:0 15px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    outline:none;
+    background:var(--surface);
+    color:var(--text);
+    font-size:14px;
+}
+
+.search:focus {
+    border-color:var(--blue);
+}
+
+.suggestions {
+    display:none;
+    position:absolute;
+    top:53px;
+    left:0;
+    right:0;
+    max-height:300px;
+    overflow-y:auto;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:9px;
+    box-shadow:0 10px 30px #0002;
+    z-index:20;
+}
+
+.suggestion {
+    padding:13px 15px;
+    border-bottom:1px solid var(--border);
+    cursor:pointer;
+    font-size:13px;
+}
+
+.suggestion:hover {
+    background:var(--soft);
+}
+
+.suggestion small {
+    display:block;
+    color:var(--muted);
+    margin-top:5px;
+}
+
+.no-suggestion {
+    padding:15px;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.filters {
+    display:flex;
+    gap:9px;
+    flex-wrap:wrap;
+    margin-bottom:25px;
+}
+
+.filters button {
+    background:transparent;
+    border:1px solid var(--border);
+    color:var(--text);
+    padding:9px 16px;
+    border-radius:25px;
+    cursor:pointer;
+}
+
+.filters button.active {
+    background:var(--text);
+    color:var(--bg);
+    border-color:var(--text);
+}
+
+.result-info {
+    color:var(--muted);
+    font-size:12px;
+    margin-bottom:18px;
+}
+
+.grid {
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:22px;
+}
+
+.game {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:11px;
+    overflow:hidden;
+    transition:.2s;
+}
+
+.game:hover {
+    transform:translateY(-4px);
+    box-shadow:0 12px 30px #0002;
+}
+
+.game img {
+    width:100%;
+    height:185px;
+    object-fit:cover;
+    background:var(--soft);
+    display:block;
+}
+
+.game-info {
+    padding:17px;
+}
+
+.category {
+    color:var(--blue);
+    font-size:10px;
+    font-weight:bold;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.game h3 {
+    margin-top:9px;
+    font-size:18px;
+}
+
+.game p {
+    margin-top:9px;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.6;
+    min-height:40px;
+}
+
+.game-bottom {
+    margin-top:15px;
+    padding-top:13px;
+    border-top:1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:8px;
+}
+
+.game-bottom span {
+    color:var(--muted);
+    font-size:11px;
+}
+
+.game-bottom button,
+.official {
+    background:var(--blue);
+    color:white;
+    border:0;
+    padding:10px 14px;
+    border-radius:5px;
+    cursor:pointer;
+    text-decoration:none;
+    font-size:12px;
+}
+
+.empty {
+    display:none;
+    text-align:center;
+    padding:60px 10px;
+    color:var(--muted);
+}
+
+.overlay {
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:30;
+    background:#000a;
+    align-items:center;
+    justify-content:center;
+    padding:15px;
+}
+
+.overlay.show {
+    display:flex;
+}
+
+.modal {
+    width:100%;
+    max-width:650px;
+    max-height:90vh;
+    overflow-y:auto;
+    position:relative;
+    background:var(--surface);
+    border-radius:12px;
+}
+
+.modal-cover {
+    width:100%;
+    height:250px;
+    object-fit:cover;
+    display:block;
+    background:var(--soft);
+}
+
+.close {
+    position:absolute;
+    top:12px;
+    right:12px;
+    width:36px;
+    height:36px;
+    border:0;
+    border-radius:50%;
+    background:white;
+    color:#111;
+    font-size:22px;
+    cursor:pointer;
+}
+
+.modal-content {
+    padding:25px;
+}
+
+.modal-content h2 {
+    margin:10px 0;
+    font-size:28px;
+}
+
+.modal-content p {
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.8;
+}
+
+.details {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin:22px 0;
+}
+
+.detail {
+    background:var(--soft);
+    padding:14px;
+    border-radius:7px;
+}
+
+.detail small {
+    display:block;
+    color:var(--muted);
+    margin-bottom:7px;
+    font-size:10px;
+}
+
+.detail strong {
+    font-size:13px;
+}
+
+.modal-actions {
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.modal-actions button {
+    background:var(--soft);
+    color:var(--text);
+    border:0;
+    padding:11px 17px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+footer {
+    border-top:1px solid var(--border);
+    padding:25px 7%;
+    display:flex;
+    justify-content:space-between;
+    color:var(--muted);
+    font-size:12px;
+}
+
+@media(max-width:900px) {
+    .grid {
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+}
+
+@media(max-width:600px) {
+    header {
+        padding:0 5%;
+    }
+
+    nav {
+        gap:10px;
+    }
+
+    nav a {
+        font-size:11px;
+    }
+
+    .logo {
+        font-size:19px;
+    }
+
+    .theme {
+        font-size:10px;
+        padding:8px;
+    }
+
+    .hero {
+        padding:60px 6%;
+    }
+
+    .library {
+        padding:25px 6% 65px;
+    }
+
+    .grid {
+        grid-template-columns:1fr;
+    }
+
+    .game img {
+        height:210px;
+    }
+
+    .search-box {
+        width:100%;
+    }
+
+    .modal-cover {
+        height:190px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <a href="./" class="logo">Berat <span>Store.</span></a>
+
+    <nav>
+        <a href="#">Ana Sayfa</a>
+        <a href="#library">Oyunlar</a>
+        <button class="theme" id="themeButton">☾ Koyu Tema</button>
+    </nav>
+</header>
+
+<section class="hero">
+    <small>BERAT STORE / GAME LIBRARY</small>
+    <h1>Oyun dünyası<br>burada başlıyor.</h1>
+    <p>Oyunları keşfet, ara ve kategorilere göre filtrele.</p>
+</section>
+
+<main class="library" id="library">
+
+    <div class="top">
+        <h2>Oyun koleksiyonu</h2>
+
+        <div class="search-box">
+            <input
+                class="search"
+                id="search"
+                type="search"
+                placeholder="Oyun, yapımcı veya tür ara..."
+                autocomplete="off"
+            >
+            <div class="suggestions" id="suggestions"></div>
+        </div>
+    </div>
+
+    <div class="filters" id="filters"></div>
+
+    <div class="result-info" id="resultInfo"></div>
+
+    <div class="grid" id="grid"></div>
+
+    <div class="empty" id="empty">
+        Aradığın oyun bulunamadı.
+    </div>
+
+</main>
+
+<div class="overlay" id="overlay">
+    <div class="modal">
+        <button class="close" id="close">×</button>
+
+        <img class="modal-cover" id="modalImage" alt="">
+
+        <div class="modal-content">
+            <span class="category" id="modalCategory"></span>
+            <h2 id="modalTitle"></h2>
+            <p id="modalDescription"></p>
+
+            <div class="details">
+                <div class="detail">
+                    <small>YAPIMCI</small>
+                    <strong id="modalDeveloper"></strong>
+                </div>
+                <div class="detail">
+                    <small>ÇIKIŞ YILI</small>
+                    <strong id="modalYear"></strong>
+                </div>
+                <div class="detail">
+                    <small>PLATFORM</small>
+                    <strong id="modalPlatform"></strong>
+                </div>
+                <div class="detail">
+                    <small>TÜR</small>
+                    <strong id="modalGenre"></strong>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <a class="official" id="modalLink" target="_blank" rel="noopener">
+                    Resmî sayfa ↗
+                </a>
+                <button id="back">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <span>Berat Store.</span>
+    <span>© 2026</span>
+</footer>
+
+<script>
+/* OYUN LİSTESİ: 25 OYUN */
+
+const games = [
+{
+name:"Grand Theft Auto V",
+aliases:"gta gta 5 grand theft auto los santos",
+category:"action",
+categoryName:"Aksiyon",
+description:"Los Santos şehrinde üç farklı karakterin hikâyesini keşfet. Açık dünya ve çevrimiçi oyun deneyimi sunar.",
+developer:"Rockstar Games",
+year:"2013",
+platform:"PC, PlayStation, Xbox",
+genre:"Aksiyon, Açık Dünya",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/271590/header.jpg",
+url:"https://www.rockstargames.com/gta-v"
+},
+{
+name:"Minecraft",
+aliases:"mc minecraft blok inşa hayatta kalma sandbox",
+category:"sandbox",
+categoryName:"Sandbox",
+description:"Bloklardan oluşan dünyada keşif yap, kaynak topla ve kendi yapılarını inşa et.",
+developer:"Mojang Studios",
+year:"2011",
+platform:"PC, Mobil, Konsol",
+genre:"Sandbox, Hayatta Kalma",
+image:"https://www.minecraft.net/content/dam/minecraftnet/games/minecraft/key-art/PDP-Box-Art_Vanilla_Standard_1920x1080.jpg",
+url:"https://www.minecraft.net/tr-tr"
+},
+{
+name:"Need for Speed Heat",
+aliases:"nfs nfs heat need for speed araba otomobil",
+category:"racing",
+categoryName:"Yarış",
+description:"Palm City sokaklarında gündüz ve gece yarışlarına katıl.",
+developer:"Ghost Games / EA",
+year:"2019",
+platform:"PC, PlayStation, Xbox",
+genre:"Araba Yarışı",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/1222680/header.jpg",
+url:"https://store.steampowered.com/app/1222680/"
+},
+{
+name:"Kerbal Space Program",
+aliases:"ksp kerbal uzay roket uzay gemisi",
+category:"simulation",
+categoryName:"Simülasyon",
+description:"Roketler tasarla, uzaya çık ve kendi uzay görevlerini gerçekleştir.",
+developer:"Squad",
+year:"2015",
+platform:"PC, PlayStation, Xbox",
+genre:"Uzay Simülasyonu",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/220200/header.jpg",
+url:"https://store.steampowered.com/app/220200/"
+},
+{
+name:"Red Dead Redemption 2",
+aliases:"rdr2 red dead kovboy western vahşi batı",
+category:"adventure",
+categoryName:"Macera",
+description:"Arthur Morgan'ın hikâyesini ve 1899 Amerika'sının geniş dünyasını keşfet.",
+developer:"Rockstar Games",
+year:"2018",
+platform:"PC, PlayStation, Xbox",
+genre:"Aksiyon, Macera",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/1174180/header.jpg",
+url:"https://store.steampowered.com/app/1174180/"
+},
+{
+name:"Cyberpunk 2077",
+aliases:"cyberpunk cp2077 gelecek bilim kurgu",
+category:"action",
+categoryName:"Aksiyon",
+description:"Night City isimli geleceğin büyük şehrinde kendi hikâyeni yaşa.",
+developer:"CD Projekt Red",
+year:"2020",
+platform:"PC, PlayStation, Xbox",
+genre:"Aksiyon, RPG",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg",
+url:"https://store.steampowered.com/app/1091500/"
+},
+{
+name:"Forza Horizon 5",
+aliases:"forza fh5 araba yarış otomobil",
+category:"racing",
+categoryName:"Yarış",
+description:"Meksika'nın geniş açık dünyasında yüzlerce araçla yarış.",
+developer:"Playground Games",
+year:"2021",
+platform:"PC, Xbox, PlayStation",
+genre:"Açık Dünya Yarış",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/1551360/header.jpg",
+url:"https://store.steampowered.com/app/1551360/"
+},
+{
+name:"Euro Truck Simulator 2",
+aliases:"ets2 euro truck tır kamyon tır sürme",
+category:"simulation",
+categoryName:"Simülasyon",
+description:"Avrupa yollarında tır sür, yük taşı ve kendi nakliye şirketini geliştir.",
+developer:"SCS Software",
+year:"2012",
+platform:"PC",
+genre:"Araç Simülasyonu",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/227300/header.jpg",
+url:"https://store.steampowered.com/app/227300/"
+},
+{
+name:"American Truck Simulator",
+aliases:"ats american truck tır kamyon abd",
+category:"simulation",
+categoryName:"Simülasyon",
+description:"Amerika Birleşik Devletleri yollarında ağır vasıta kullan.",
+developer:"SCS Software",
+year:"2016",
+platform:"PC",
+genre:"Araç Simülasyonu",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/270880/header.jpg",
+url:"https://store.steampowered.com/app/270880/"
+},
+{
+name:"The Sims 4",
+aliases:"sims sims4 yaşam hayat",
+category:"simulation",
+categoryName:"Simülasyon",
+description:"Karakterler oluştur, evler tasarla ve kendi yaşam hikâyeni kur.",
+developer:"Maxis / EA",
+year:"2014",
+platform:"PC, PlayStation, Xbox",
+genre:"Yaşam Simülasyonu",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/1222670/header.jpg",
+url:"https://www.ea.com/games/the-sims/the-sims-4"
+},
+{
+name:"Terraria",
+aliases:"terraria maden kazma blok macera",
+category:"adventure",
+categoryName:"Macera",
+description:"2D dünyada keşif yap, maden çıkar, eşyalar üret ve maceralara atıl.",
+developer:"Re-Logic",
+year:"2011",
+platform:"PC, Mobil, Konsol",
+genre:"Sandbox, Macera",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/105600/header.jpg",
+url:"https://store.steampowered.com/app/105600/"
+},
+{
+name:"Stardew Valley",
+aliases:"stardew çiftlik tarım köy",
+category:"simulation",
+categoryName:"Simülasyon",
+description:"Kendi çiftliğini kur, ürün yetiştir ve kasaba halkıyla tanış.",
+developer:"ConcernedApe",
+year:"2016",
+platform:"PC, Mobil, Konsol",
+genre:"Çiftlik Simülasyonu",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/413150/header.jpg",
+url:"https://store.steampowered.com/app/413150/"
+},
+{
+name:"Portal 2",
+aliases:"portal portal2 bulmaca puzzle",
+category:"adventure",
+categoryName:"Macera",
+description:"Portal silahını kullanarak farklı fizik bulmacalarını çöz.",
+developer:"Valve",
+year:"2011",
+platform:"PC, Konsol",
+genre:"Bulmaca",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/620/header.jpg",
+url:"https://store.steampowered.com/app/620/"
+},
+{
+name:"Half-Life 2",
+aliases:"half life halflife hl2 bilim kurgu",
+category:"action",
+categoryName:"Aksiyon",
+description:"Gordon Freeman ile bilim kurgu temalı bir maceraya katıl.",
+developer:"Valve",
+year:"2004",
+platform:"PC",
+genre:"Aksiyon",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/220/header.jpg",
+url:"https://store.steampowered.com/app/220/"
+},
+{
+name:"Subnautica",
+aliases:"subnautica deniz okyanus sualtı",
+category:"adventure",
+categoryName:"Macera",
+description:"Gizemli bir okyanus gezegeninde su altı dünyasını keşfet.",
+developer:"Unknown Worlds",
+year:"2018",
+platform:"PC, PlayStation, Xbox",
+genre:"Hayatta Kalma",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/264710/header.jpg",
+url:"https://store.steampowered.com/app/264710/"
+},
+{
+name:"No Man's Sky",
+aliases:"no mans sky uzay gezegen keşif",
+category:"adventure",
+categoryName:"Macera",
+description:"Çok sayıda gezegeni keşfet ve uzayda kendi yolculuğunu oluştur.",
+developer:"Hello Games",
+year:"2016",
+platform:"PC, PlayStation, Xbox",
+genre:"Uzay Macerası",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/275850/header.jpg",
+url:"https://store.steampowered.com/app/275850/"
+},
+{
+name:"Cities: Skylines",
+aliases:"cities skylines şehir şehir kurma belediye",
+category:"simulation",
+categoryName:"Simülasyon",
+description:"Kendi şehrini kur, yolları planla ve şehrinin gelişimini yönet.",
+developer:"Colossal Order",
+year:"2015",
+platform:"PC, Konsol",
+genre:"Şehir Kurma",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/255710/header.jpg",
+url:"https://store.steampowered.com/app/255710/"
+},
+{
+name:"ARK: Survival Evolved",
+aliases:"ark dinozor hayatta kalma survival",
+category:"adventure",
+categoryName:"Macera",
+description:"Dinozorların yaşadığı bir dünyada hayatta kal ve çevreyi keşfet.",
+developer:"Studio Wildcard",
+year:"2017",
+platform:"PC, PlayStation, Xbox",
+genre:"Hayatta Kalma",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/346110/header.jpg",
+url:"https://store.steampowered.com/app/346110/"
+},
+{
+name:"Rust",
+aliases:"rust hayatta kalma survival üs",
+category:"action",
+categoryName:"Aksiyon",
+description:"Açık dünyada kaynak topla, barınak kur ve hayatta kalmaya çalış.",
+developer:"Facepunch Studios",
+year:"2018",
+platform:"PC, PlayStation, Xbox",
+genre:"Hayatta Kalma",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/252490/header.jpg",
+url:"https://store.steampowered.com/app/252490/"
+},
+{
+name:"Fallout 4",
+aliases:"fallout nükleer kıyamet rol yapma",
+category:"adventure",
+categoryName:"Macera",
+description:"Kıyamet sonrası bir dünyada keşif yap ve kendi hikâyeni oluştur.",
+developer:"Bethesda Game Studios",
+year:"2015",
+platform:"PC, PlayStation, Xbox",
+genre:"RPG, Açık Dünya",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/377160/header.jpg",
+url:"https://store.steampowered.com/app/377160/"
+},
+{
+name:"The Witcher 3: Wild Hunt",
+aliases:"witcher witcher 3 geralt fantastik",
+category:"adventure",
+categoryName:"Macera",
+description:"Geralt ile fantastik bir dünyada görevler yap ve hikâyeyi keşfet.",
+developer:"CD Projekt Red",
+year:"2015",
+platform:"PC, PlayStation, Xbox, Switch",
+genre:"RPG, Macera",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/292030/header.jpg",
+url:"https://store.steampowered.com/app/292030/"
+},
+{
+name:"Dying Light",
+aliases:"dying light zombi parkur",
+category:"action",
+categoryName:"Aksiyon",
+description:"Tehlikeli bir şehirde parkur hareketleriyle dolaş ve görevleri tamamla.",
+developer:"Techland",
+year:"2015",
+platform:"PC, PlayStation, Xbox",
+genre:"Aksiyon, Hayatta Kalma",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/239140/header.jpg",
+url:"https://store.steampowered.com/app/239140/"
+},
+{
+name:"BeamNG.drive",
+aliases:"beamng araba araç fizik çarpışma",
+category:"simulation",
+categoryName:"Simülasyon",
+description:"Gelişmiş araç fiziğiyle farklı araçları ve sürüş ortamlarını deneyimle.",
+developer:"BeamNG",
+year:"2015",
+platform:"PC",
+genre:"Araç Simülasyonu",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/284160/header.jpg",
+url:"https://store.steampowered.com/app/284160/"
+},
+{
+name:"People Playground",
+aliases:"people playground fizik deney",
+category:"simulation",
+categoryName:"Simülasyon",
+description:"Fizik tabanlı bir sandbox ortamında farklı nesnelerle deneyler yap.",
+developer:"mestiez",
+year:"2019",
+platform:"PC",
+genre:"Fizik Sandbox",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/1118200/header.jpg",
+url:"https://store.steampowered.com/app/1118200/"
+},
+{
+name:"Besiege",
+aliases:"besiege makine mühendislik araç",
+category:"simulation",
+categoryName:"Simülasyon",
+description:"Fizik tabanlı parçalarla makineler ve kuşatma araçları tasarla.",
+developer:"Spiderling Studios",
+year:"2020",
+platform:"PC, Konsol",
+genre:"Fizik, Yapım",
+image:"https://cdn.cloudflare.steamstatic.com/steam/apps/346010/header.jpg",
+url:"https://store.steampowered.com/app/346010/"
+}
+];
+
+
+/* ARAMA VE FİLTRE SİSTEMİ */
+
+const grid = document.getElementById("grid");
+const search = document.getElementById("search");
+const suggestions = document.getElementById("suggestions");
+const empty = document.getElementById("empty");
+const filters = document.getElementById("filters");
+const resultInfo = document.getElementById("resultInfo");
+
+let activeCategory = "all";
+
+function normalize(text) {
+    return String(text)
+        .toLocaleLowerCase("tr-TR")
+        .replace(/ı/g,"i")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g,"")
+        .trim();
+}
+
+function searchableText(game) {
+    return normalize([
+        game.name,
+        game.aliases,
+        game.categoryName,
+        game.description,
+        game.developer,
+        game.genre,
+        game.platform
+    ].join(" "));
+}
+
+function getFilteredGames() {
+    const query = normalize(search.value);
+    const words = query.split(/\s+/).filter(Boolean);
+
+    return games.filter(game => {
+        const matchesWords = words.every(word =>
+            searchableText(game).includes(word)
+        );
+
+        const matchesCategory =
+            activeCategory === "all" ||
+            game.category === activeCategory;
+
+        return matchesWords && matchesCategory;
+    });
+}
+
+
+/* KATEGORİLERİ OLUŞTUR */
+
+const categories = [
+    ["all","Tümü"],
+    ["action","Aksiyon"],
+    ["adventure","Macera"],
+    ["racing","Yarış"],
+    ["simulation","Simülasyon"],
+    ["sandbox","Sandbox"]
+];
+
+categories.forEach(([value,label]) => {
+    const button = document.createElement("button");
+    button.textContent = label;
+    button.dataset.category = value;
+
+    if (value === "all") button.classList.add("active");
+
+    button.addEventListener("click", () => {
+        activeCategory = value;
+
+        filters.querySelectorAll("button").forEach(item => {
+            item.classList.toggle(
+                "active",
+                item.dataset.category === value
+            );
+        });
+
+        render();
+        updateSuggestions();
+    });
+
+    filters.appendChild(button);
+});
+
+
+/* OYUN KARTLARINI GÖSTER */
+
+function render() {
+    const filtered = getFilteredGames();
+
+    grid.innerHTML = "";
+
+    resultInfo.textContent =
+        filtered.length + " oyun gösteriliyor / " + games.length + " oyun";
+
+    filtered.forEach(game => {
+        const card = document.createElement("article");
+        card.className = "game";
+
+        const img = document.createElement("img");
+        img.src = game.image;
+        img.alt = game.name;
+        img.loading = "lazy";
+
+        const info = document.createElement("div");
+        info.className = "game-info";
+
+        const category = document.createElement("span");
+        category.className = "category";
+        category.textContent = game.categoryName;
+
+        const title = document.createElement("h3");
+        title.textContent = game.name;
+
+        const description = document.createElement("p");
+        description.textContent = game.description;
+
+        const bottom = document.createElement("div");
+        bottom.className = "game-bottom";
+
+        const platform = document.createElement("span");
+        platform.textContent = game.platform;
+
+        const button = document.createElement("button");
+        button.textContent = "İncele ↗";
+        button.addEventListener("click", () => showGame(game));
+
+        bottom.append(platform,button);
+        info.append(category,title,description,bottom);
+        card.append(img,info);
+        grid.appendChild(card);
+    });
+
+    empty.style.display = filtered.length ? "none" : "block";
+}
+
+
+/* ARAMA ÖNERİLERİ */
+
+function updateSuggestions() {
+    const query = normalize(search.value);
+
+    suggestions.innerHTML = "";
+
+    if (!query) {
+        suggestions.style.display = "none";
+        return;
+    }
+
+    const words = query.split(/\s+/).filter(Boolean);
+
+    const results = games.filter(game =>
+        words.every(word => searchableText(game).includes(word))
+    );
+
+    if (results.length === 0) {
+        const message = document.createElement("div");
+        message.className = "no-suggestion";
+        message.textContent = "Oyun bulunamadı.";
+        suggestions.appendChild(message);
+    } else {
+        results.slice(0,10).forEach(game => {
+            const item = document.createElement("div");
+            item.className = "suggestion";
+
+            const title = document.createElement("strong");
+            title.textContent = game.name;
+
+            const detail = document.createElement("small");
+            detail.textContent = game.categoryName + " • " + game.developer;
+
+            item.append(title,detail);
+
+            item.addEventListener("click", () => {
+                search.value = game.name;
+                activeCategory = "all";
+
+                filters.querySelectorAll("button").forEach(button => {
+                    button.classList.toggle(
+                        "active",
+                        button.dataset.category === "all"
+                    );
+                });
+
+                render();
+                suggestions.style.display = "none";
+                showGame(game);
+            });
+
+            suggestions.appendChild(item);
+        });
+    }
+
+    suggestions.style.display = "block";
+}
+
+
+/* ARAMA KUTUSU */
+
+search.addEventListener("input", () => {
+    render();
+    updateSuggestions();
+});
+
+search.addEventListener("keydown", event => {
+    if (event.key === "Enter") {
+        const first = getFilteredGames()[0];
+
+        if (first) {
+            suggestions.style.display = "none";
+            showGame(first);
+        }
+    }
+
+    if (event.key === "Escape") {
+        suggestions.style.display = "none";
+    }
+});
+
+document.addEventListener("click", event => {
+    if (!event.target.closest(".search-box")) {
+        suggestions.style.display = "none";
+    }
+});
+
+
+/* OYUN DETAY PENCERESİ */
+
+const overlay = document.getElementById("overlay");
+
+function showGame(game) {
+    document.getElementById("modalImage").src = game.image;
+    document.getElementById("modalImage").alt = game.name;
+    document.getElementById("modalCategory").textContent = game.categoryName;
+    document.getElementById("modalTitle").textContent = game.name;
+    document.getElementById("modalDescription").textContent = game.description;
+    document.getElementById("modalDeveloper").textContent = game.developer;
+    document.getElementById("modalYear").textContent = game.year;
+    document.getElementById("modalPlatform").textContent = game.platform;
+    document.getElementById("modalGenre").textContent = game.genre;
+    document.getElementById("modalLink").href = game.url;
+
+    overlay.classList.add("show");
+    document.body.style.overflow = "hidden";
+}
+
+function closeModal() {
+    overlay.classList.remove("show");
+    document.body.style.overflow = "";
+}
+
+document.getElementById("close").addEventListener("click",closeModal);
+document.getElementById("back").addEventListener("click",closeModal);
+
+overlay.addEventListener("click",event => {
+    if (event.target === overlay) closeModal();
+});
+
+document.addEventListener("keydown",event => {
+    if (event.key === "Escape") closeModal();
+});
+
+
+/* KOYU / AYDINLIK TEMA */
+
+const themeButton = document.getElementById("themeButton");
+
+let savedTheme = "light";
+
+try {
+    savedTheme = localStorage.getItem("beratTheme") || "light";
+} catch(error) {}
+
+function setTheme(theme) {
+    document.body.classList.toggle("dark",theme === "dark");
+
+    themeButton.textContent =
+        theme === "dark" ? "☀ Aydınlık Tema" : "☾ Koyu Tema";
+
+    try {
+        localStorage.setItem("beratTheme",theme);
+    } catch(error) {}
+}
+
+setTheme(savedTheme);
+
+themeButton.addEventListener("click",() => {
+    const nextTheme = document.body.classList.contains("dark")
+        ? "light"
+        : "dark";
+
+    setTheme(nextTheme);
+});
+
+
+/* İLK AÇILIŞ */
+
+render();
+
+</script>
+
+</body>
+</html>
